@@ -42,3 +42,14 @@ async def guess(word: str = Query(...), cookie_id: str = Cookie(alias="id")):
 @app.get("/state")
 async def state():
     return {"guesses": guesses}
+
+def evaluate_word(guess, secret):
+    result = []
+    for i in range(len(secret)):
+        if guess[i] == secret[i]:
+            result.append("green")
+        elif guess[i] in secret:
+            result.append("yellow")
+        else:
+            result.append("gray")
+    return result

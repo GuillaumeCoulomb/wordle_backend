@@ -23,3 +23,26 @@ async function refresh() {
   const data = await res.json();
   renderGuesses(data.guesses);
 }
+
+function renderGuesses(guesses) {
+  const div = document.getElementById("history");
+  div.innerHTML = "";
+  for (const [user, word, colors] of guesses) {
+    const line = document.createElement("div");
+    for (let i = 0; i < word.length; i++) {
+      const span = document.createElement("span");
+      span.textContent = word[i];
+      span.style.backgroundColor = (
+        colors[i] === "green" ? "green" :
+        colors[i] === "yellow" ? "goldenrod" :
+        "gray"
+      );
+      span.style.margin = "2px";
+      line.appendChild(span);
+    }
+    div.appendChild(line);
+  }
+}
+
+setInterval(refresh, 2000);
+init();
