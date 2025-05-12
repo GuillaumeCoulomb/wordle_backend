@@ -29,3 +29,16 @@ async def init(cookie_id: str = Cookie(alias="id")):
     if cookie_id not in user_ids:
         return {"error": "invalid id"}
     return {"guesses": guesses}
+
+@app.post("/guess")
+async def guess(word: str = Query(...), cookie_id: str = Cookie(alias="id")):
+    if cookie_id not in user_ids:
+        return {"status": "ignored"}
+    word = word.upper()
+    result = evaluate_word(word, SECRET_WORD)
+    guesses.append((cookie_id, word, result))
+    return {"status": "ok", "result": result}
+
+@app.get("/state")
+async def state():
+    return {"guesses": guesses}

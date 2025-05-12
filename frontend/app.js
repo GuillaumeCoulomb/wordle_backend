@@ -17,3 +17,9 @@ async function submitGuess() {
     refresh();
   }
 }
+
+async function refresh() {
+  const res = await fetch("/state", { credentials: "include" });
+  const data = await res.json();
+  renderGuesses(data.guesses);
+}
