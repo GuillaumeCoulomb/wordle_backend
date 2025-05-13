@@ -3,12 +3,24 @@ from fastapi.responses import JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from uuid import uuid4
+import random
 
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True)
 app.mount("/frontend", StaticFiles(directory="frontend"), name="frontend")
 
-SECRET_WORD = "MINES"
+
+def chose_random_word(file):
+    with open(file, 'r') as f:
+        words = f.readlines()
+    words = [mot.strip() for mot in words]  
+    return random.choice(words)
+
+
+file= 'word_list.txt'
+SECRET_WORD = chose_random_word(file)
+
+
 user_ids = set()
 guesses = []
 

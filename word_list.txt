@@ -1,0 +1,10 @@
+MINES  
+PARIS  
+SEINE  
+METRO  
+RIVES  
+LIGNE   
+PARCS  
+MUSEE      
+CAFES  
+LIVRE  
