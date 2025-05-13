@@ -5,6 +5,8 @@ async function init() {
   renderGuesses(data.guesses);
 }
 
+// récupération du mot entré par l'utilisateur
+
 async function submitGuess() {
   const word = document.getElementById("guessInput").value;
   if (word.length !== 5) return alert("Mot de 5 lettres requis !");
@@ -18,11 +20,15 @@ async function submitGuess() {
   }
 }
 
+// rafraichissement de la page
+
 async function refresh() {
   const res = await fetch("/state", { credentials: "include" });
   const data = await res.json();
   renderGuesses(data.guesses);
 }
+
+// écriture des nouvelles lignes d'essai
 
 function renderGuesses(guesses) {
   const div = document.getElementById("history");

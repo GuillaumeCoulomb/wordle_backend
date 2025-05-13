@@ -10,6 +10,8 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True)
 app.mount("/frontend", StaticFiles(directory="frontend"), name="frontend")
 
 
+#mot secret pioché aléatoirement dans fichier texte 
+
 def chose_random_word(file):
     with open(file, 'r') as f:
         words = f.readlines()
@@ -21,12 +23,17 @@ file= 'word_list.txt'
 SECRET_WORD = chose_random_word(file)
 
 
+
 user_ids = set()
-guesses = []
+guesses = [] #liste des mots essayés
+
+#endpoint page accueil
 
 @app.get("/")
 async def root():
     return FileResponse("frontend/index.html")
+
+#endpoint id utilisateur
 
 @app.get("/preinit")
 async def preinit():
@@ -35,6 +42,8 @@ async def preinit():
     res = JSONResponse({"status": "ok"})
     res.set_cookie("id", user_id, samesite="none", secure=True)
     return res
+
+# verification identifiant utilisateur
 
 @app.get("/init")
 async def init(cookie_id: str = Cookie(alias="id")):
@@ -48,12 +57,14 @@ async def guess(word: str = Query(...), cookie_id: str = Cookie(alias="id")):
         return {"status": "ignored"}
     word = word.upper()
     result = evaluate_word(word, SECRET_WORD)
-    guesses.append((cookie_id, word, result))
+    guesses.append((cookie_id, word, result)) #enregistrement de l'essai
     return {"status": "ok", "result": result}
 
 @app.get("/state")
 async def state():
     return {"guesses": guesses}
+
+# evaluation de la correspondance avec mot secret
 
 def evaluate_word(guess, secret):
     result = []
